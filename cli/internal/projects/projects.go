@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"reflect"
 )
 
 var projectsFileName = "./projects.json"
@@ -94,4 +95,34 @@ func AddProject(name string) (Project, error) {
 	}
 
 	return newProject, nil
+}
+
+func DeleteProject(name string) (Project, error) {
+	projects, err := getProjectsFromFile()
+
+	if err != nil {
+		return Project{}, err
+	}
+
+	var projectToDelete Project
+	for i := 0; i < len(projects); i++ {
+		project := projects[i]
+
+		if project.Name == name {
+			projectToDelete = project
+			projects = append(projects[:i], projects[i+1:]...)
+			break
+		}
+	}
+
+	if err = saveProjectsFile(projects); err != nil {
+		fmt.Println("could not save projects")
+		return projectToDelete, err
+	}
+
+	if reflect.DeepEqual(Project{}, projectToDelete) {
+		return Project{}, fmt.Errorf("could not find a project with the %v name", name)
+	}
+
+	return projectToDelete, nil
 }

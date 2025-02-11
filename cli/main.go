@@ -7,7 +7,11 @@ import (
 )
 
 func main() {
-	if _, err := projects.AddProject("git-report"); err != nil {
+	// if _, err := projects.AddProject("test-8"); err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	if _, err := projects.DeleteProject("git-report"); err != nil {
 		fmt.Println(err)
 	}
 
@@ -17,5 +21,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("projects: ", projectList)
+	fmt.Printf("projects: %+v", projectList)
 }
